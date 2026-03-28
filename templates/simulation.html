@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Crime Control Room - Live Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <div class="bg-grid"></div>
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+      <header class="flex flex-wrap items-center justify-between gap-3 mb-8">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+            ⚡ Live Traffic Simulation
+          </h1>
+          <p class="text-sm text-slate-300 mt-2">
+            Monitoring real-time packet flow and detecting anomalies.
+          </p>
+        </div>
+        <nav class="flex gap-2">
+          <a href="/" class="nav-pill">Upload</a>
+          <a href="/dashboard" class="nav-pill">Dashboard</a>
+          <a href="/query" class="nav-pill">Query Panel</a>
+          <a href="/simulation" class="nav-pill active">Simulation</a>
+        </nav>
+      </header>
+
+      <section class="card p-6 mb-6 fade-in">
+        <div class="flex flex-wrap gap-4 items-center mb-6">
+          <button
+            id="startSimBtn"
+            class="btn-primary flex items-center gap-2"
+            type="button"
+          >
+            <span class="text-2xl">●</span>
+            Start Simulation
+          </button>
+          <button
+            id="stopSimBtn"
+            class="btn-secondary flex items-center gap-2"
+            type="button"
+            disabled
+          >
+            <span class="text-2xl">●</span>
+            Stop Simulation
+          </button>
+        </div>
+
+        <div class="mb-6">
+          <div class="flex items-center gap-4 mb-2">
+            <label
+              for="speedSlider"
+              class="text-sm font-semibold flex items-center gap-2"
+            >
+              ⏱️ Simulation Speed (seconds)
+            </label>
+            <span id="speedValue" class="text-red-400 font-semibold text-lg"
+              >0.50</span
+            >
+          </div>
+          <input
+            id="speedSlider"
+            type="range"
+            min="0.10"
+            max="2.00"
+            step="0.05"
+            value="0.50"
+            class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+          />
+          <div class="flex justify-between text-xs text-slate-400 mt-1">
+            <span>0.10</span>
+            <span>2.00</span>
+          </div>
+        </div>
+
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input
+            id="showFullDataCheckbox"
+            type="checkbox"
+            class="w-5 h-5 cursor-pointer"
+          />
+          <span class="text-sm text-slate-200"
+            >📊 Show full simulation data</span
+          >
+        </label>
+      </section>
+
+      <section class="card p-6 fade-in delay-1">
+        <h2 class="text-xl font-bold mb-4">Live Traffic Stream</h2>
+        <div class="sim-chart-frame">
+          <canvas id="simulationChart"></canvas>
+        </div>
+      </section>
+
+      <section class="card p-6 mt-6 fade-in delay-2">
+        <h2 class="text-xl font-bold mb-3">Simulation Details</h2>
+        <div id="simulationStats" class="grid md:grid-cols-4 gap-4">
+          <div class="metric-card">
+            <p class="metric-label">Packets Sent</p>
+            <p class="metric-value" id="statPackets">0</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-label">Current Rate</p>
+            <p class="metric-value" id="statRate">0</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-label">Anomalies Detected</p>
+            <p class="metric-value" id="statAnomalies">0</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-label">Status</p>
+            <p class="metric-value text-cyan-300" id="statStatus">Idle</p>
+          </div>
+        </div>
+        <div id="simulationDataContainer" class="hidden mt-6">
+          <p class="text-sm text-slate-300 mb-2">Raw Simulation Data:</p>
+          <pre
+            id="simulationDataDisplay"
+            class="text-xs text-cyan-200 bg-slate-900/60 border border-slate-700 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap max-h-48"
+          ></pre>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/simulation.js') }}"></script>
+  </body>
+</html>

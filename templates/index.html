@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Crime Control Room - Upload</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <div class="bg-grid"></div>
+    <main class="relative z-10 max-w-6xl mx-auto px-4 py-8">
+      <header class="flex flex-wrap items-center justify-between gap-3 mb-8">
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+          Digital Crime Control Room
+        </h1>
+        <nav class="flex gap-2">
+          <a href="/" class="nav-pill active">Upload</a>
+          <a href="/dashboard" class="nav-pill">Dashboard</a>
+          <a href="/query" class="nav-pill">Query Panel</a>
+          <a href="/simulation" class="nav-pill">Simulation</a>
+        </nav>
+      </header>
+
+      <section class="card p-6 md:p-8 fade-in">
+        <h2 class="text-xl md:text-2xl font-bold mb-2">
+          Upload Cyber Attack Dataset
+        </h2>
+        <p class="text-slate-400 mb-6">
+          Drop CICIDS or similar CSV files to parse and insert normalized data
+          into MySQL.
+        </p>
+
+        <form id="uploadForm" class="space-y-4">
+          <div id="dropZone" class="drop-zone">
+            <input
+              id="fileInput"
+              name="file"
+              type="file"
+              accept=".csv"
+              title="Select CSV file"
+              aria-label="Select CSV file"
+              class="hidden"
+            />
+            <p class="text-lg font-semibold">Drag & drop CSV here</p>
+            <p class="text-slate-400 text-sm">or click to browse</p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button id="uploadBtn" type="submit" class="btn-primary">
+              Upload & Process
+            </button>
+            <div id="loading" class="loading hidden"></div>
+          </div>
+        </form>
+
+        <div id="statusBox" class="mt-6 hidden"></div>
+      </section>
+
+      <section class="card p-6 mt-6 fade-in delay-1">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h3 class="text-lg font-semibold">CSV Sample Data Preview</h3>
+          <p id="sampleFileName" class="text-sm text-slate-400"></p>
+        </div>
+        <p class="text-sm text-slate-400 mb-3">
+          After selecting a CSV, the first few rows will appear here.
+        </p>
+        <div id="sampleDataContainer" class="overflow-x-auto">
+          <p class="text-sm text-slate-500">No file selected.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+  </body>
+</html>

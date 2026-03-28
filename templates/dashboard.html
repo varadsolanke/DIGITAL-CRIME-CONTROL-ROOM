@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Crime Control Room - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <div class="bg-grid"></div>
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8 dashboard-shell">
+      <header class="dashboard-header fade-in">
+        <div>
+          <p class="dashboard-kicker">Digital Crime Control Room</p>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+            Threat Analytics Dashboard
+          </h1>
+          <p class="text-sm text-slate-300 mt-2 max-w-2xl">
+            Live view of dominant attack patterns and time-based spikes from the
+            processed dataset.
+          </p>
+        </div>
+        <nav class="flex gap-2">
+          <a href="/" class="nav-pill">Upload</a>
+          <a href="/dashboard" class="nav-pill active">Dashboard</a>
+          <a href="/query" class="nav-pill">Query Panel</a>
+          <a href="/simulation" class="nav-pill">Simulation</a>
+        </nav>
+      </header>
+
+      {% if error %}
+      <div class="card p-5 border border-red-500/50 text-red-200 mt-6">
+        {{ error }}
+      </div>
+      {% else %}
+      <section class="dashboard-metrics mt-6">
+        <article class="metric-card fade-in">
+          <p class="metric-label">Total Attacks</p>
+          <p class="metric-value">{{ metrics.total_attacks }}</p>
+        </article>
+        <article class="metric-card fade-in delay-1">
+          <p class="metric-label">Unique Users</p>
+          <p class="metric-value">{{ metrics.unique_users }}</p>
+        </article>
+        <article class="metric-card fade-in delay-2">
+          <p class="metric-label">Unique Targets</p>
+          <p class="metric-value">{{ metrics.unique_targets }}</p>
+        </article>
+      </section>
+
+      <section class="dashboard-grid mt-6">
+        <article class="card dashboard-chart fade-in delay-1">
+          <div class="dashboard-card-head">
+            <h2 class="text-lg font-bold">Attack Type Distribution</h2>
+            <p class="text-xs text-slate-400">Top 10 categories</p>
+          </div>
+          <div class="chart-frame">
+            <canvas id="attackTypeChart"></canvas>
+          </div>
+          <div class="chart-note">
+            <h3 class="text-sm font-semibold text-cyan-200">
+              How to read this graph
+            </h3>
+            <p id="attackSummaryHint" class="text-sm text-slate-300 mt-1">
+              This chart compares how frequently each attack type appears.
+            </p>
+          </div>
+        </article>
+
+        <article class="card dashboard-chart fade-in delay-2">
+          <div class="dashboard-card-head">
+            <h2 class="text-lg font-bold">Attacks Over Time</h2>
+            <p class="text-xs text-slate-400">Minute-wise trend</p>
+          </div>
+          <div class="chart-frame">
+            <canvas id="attackTimeChart"></canvas>
+          </div>
+          <div class="chart-note">
+            <h3 class="text-sm font-semibold text-emerald-200">
+              How to read this graph
+            </h3>
+            <p id="timeSummaryHint" class="text-sm text-slate-300 mt-1">
+              This line shows when traffic spikes happened and how intense they
+              were.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section class="card dashboard-learn mt-6 fade-in delay-3">
+        <h2 class="text-lg font-bold mb-2">Learn About Attack Types</h2>
+        <p class="text-sm text-slate-400 mb-4">
+          Understand network threats in a simple, structured way. Select an
+          attack type to learn more:
+        </p>
+        <div id="learnAttackTypesList" class="space-y-2"></div>
+      </section>
+
+      <section class="card dashboard-explain mt-6 fade-in delay-3">
+        <h2 class="text-lg font-bold">Graph Explanations and Insights</h2>
+        <p class="text-sm text-slate-400 mt-1">
+          Use this section to quickly understand what each graph means and where
+          to focus investigation first.
+        </p>
+        <div
+          id="dashboardInsights"
+          class="grid md:grid-cols-2 gap-3 text-sm mt-4"
+        ></div>
+      </section>
+      {% endif %}
+    </main>
+
+    <script id="dashboardDataJson" type="application/json">
+      {{ {
+          "attackDistribution": attack_distribution if attack_distribution else [],
+          "attacksOverTime": attacks_over_time if attacks_over_time else []
+        } | tojson }}
+    </script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  </body>
+</html>

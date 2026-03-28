@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Crime Control Room - Query Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <div class="bg-grid"></div>
+    <main class="relative z-10 max-w-7xl mx-auto px-4 py-8">
+      <header class="flex flex-wrap items-center justify-between gap-3 mb-8">
+        <h1 class="text-3xl md:text-4xl font-black tracking-tight">
+          SQL Query Panel
+        </h1>
+        <nav class="flex gap-2">
+          <a href="/" class="nav-pill">Upload</a>
+          <a href="/dashboard" class="nav-pill">Dashboard</a>
+          <a href="/query" class="nav-pill active">Query Panel</a>
+          <a href="/simulation" class="nav-pill">Simulation</a>
+        </nav>
+      </header>
+
+      <section class="card p-6 mb-5 fade-in">
+        <h2 class="text-xl font-bold mb-4">Predefined Queries</h2>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button class="btn-secondary q-btn" data-query="frequent_attackers">
+            Frequent Attackers
+          </button>
+          <button class="btn-secondary q-btn" data-query="recent_attacks">
+            Attacks In Last 1 Minute
+          </button>
+          <button class="btn-secondary q-btn" data-query="join_query">
+            Join Query
+          </button>
+          <button class="btn-secondary q-btn" data-query="rollup">
+            Roll-up
+          </button>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-3 mb-3">
+          <input
+            id="drillAttackType"
+            class="input-dark"
+            placeholder="Drill-down attack type (example: DoS Hulk)"
+          />
+          <button id="drillBtn" class="btn-secondary">Run Drill-down</button>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <input
+            id="sliceAttackType"
+            class="input-dark"
+            placeholder="Slice attack type"
+          />
+          <input
+            id="sliceProtocol"
+            class="input-dark"
+            placeholder="Slice protocol"
+          />
+          <input
+            id="sliceStart"
+            class="input-dark"
+            placeholder="Start time: YYYY-MM-DD HH:MM:SS"
+          />
+          <input
+            id="sliceEnd"
+            class="input-dark"
+            placeholder="End time: YYYY-MM-DD HH:MM:SS"
+          />
+        </div>
+        <button id="sliceBtn" class="btn-secondary mt-3">
+          Run Slice & Dice
+        </button>
+      </section>
+
+      <section class="card p-6 mb-5 fade-in delay-1">
+        <h2 class="text-xl font-bold mb-4">Natural Language Query</h2>
+        <textarea
+          id="naturalLanguageQuery"
+          class="input-dark min-h-28"
+          placeholder="Example: Show top 10 frequent attackers in last 5 minutes"
+        ></textarea>
+        <button id="runNlBtn" class="btn-primary mt-3">
+          Convert To SQL & Run
+        </button>
+      </section>
+
+      <section class="card p-6 mb-5 fade-in delay-1">
+        <h2 class="text-xl font-bold mb-4">Custom SQL (Read-Only)</h2>
+        <textarea
+          id="customSql"
+          class="input-dark min-h-36"
+          placeholder="SELECT * FROM activity_logs LIMIT 100"
+        ></textarea>
+        <button id="runCustomBtn" class="btn-primary mt-3">
+          Run Custom Query
+        </button>
+      </section>
+
+      <section class="card p-6 fade-in delay-2">
+        <h2 class="text-xl font-bold mb-3">Results</h2>
+        <p id="queryStatus" class="text-sm text-slate-400 mb-3"></p>
+        <div class="mb-3">
+          <p class="text-sm text-slate-300 mb-1">Generated SQL</p>
+          <pre
+            id="generatedSqlDisplay"
+            class="text-xs text-cyan-200 bg-slate-900/60 border border-slate-700 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap"
+          >
+Run any query to view generated SQL.</pre
+          >
+        </div>
+        <div id="resultContainer" class="overflow-x-auto"></div>
+      </section>
+
+      <section class="card p-6 mt-5 fade-in delay-3">
+        <div class="dashboard-card-head">
+          <h2 class="text-xl font-bold">Latest Executed Query</h2>
+          <div class="flex items-center gap-3">
+            <p id="queryPageLastQueryType" class="text-xs text-slate-400"></p>
+            <button
+              id="clearQueryHistoryBtn"
+              class="btn-secondary text-xs px-3 py-1"
+              type="button"
+            >
+              Delete All
+            </button>
+          </div>
+        </div>
+        <pre
+          id="queryPageLastSql"
+          class="text-xs text-cyan-200 bg-slate-900/60 border border-slate-700 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap"
+        >
+No query has been executed yet.</pre
+        >
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/query.js') }}"></script>
+  </body>
+</html>
